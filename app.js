@@ -157,6 +157,11 @@ async function openDetail(id) {
       : `<div class="detail-img-placeholder">📦</div>`}
     <div class="detail-body">
       <span class="detail-status-badge ${STATUS_DETAIL_BADGE[p.status]}">${STATUS_LABEL[p.status]}</span>
+      ${p.price ? `
+        <div>
+          <div class="detail-notes-label">Precio</div>
+          <div class="detail-price">${esc(p.price)}</div>
+        </div>` : ''}
       ${p.notes ? `
         <div>
           <div class="detail-notes-label">Notas</div>
@@ -302,6 +307,7 @@ document.getElementById('btnDeleteCategory').addEventListener('click', async () 
 function resetProductForm() {
   document.getElementById('inp-prod-name').value = '';
   document.getElementById('inp-prod-notes').value = '';
+  document.getElementById('inp-prod-price').value = '';
   document.getElementById('inp-prod-img-url').value = '';
   document.getElementById('prod-file-label').textContent = 'Toca para elegir imagen';
   document.getElementById('prod-img-preview-wrap').style.display = 'none';
@@ -371,6 +377,7 @@ async function openEditProduct(id) {
   document.getElementById('prodSheetTitle').textContent = 'Editar producto';
   document.getElementById('inp-prod-name').value = p.name;
   document.getElementById('inp-prod-notes').value = p.notes || '';
+  document.getElementById('inp-prod-price').value = p.price || '';
   currentStatus = p.status;
   document.querySelectorAll('.sp-btn').forEach(b => b.classList.toggle('active', b.dataset.status === p.status));
   pendingImg = p.img || null;
@@ -396,16 +403,17 @@ document.getElementById('btnSaveProduct').addEventListener('click', async () => 
   const name = document.getElementById('inp-prod-name').value.trim();
   if (!name) { document.getElementById('inp-prod-name').focus(); return; }
   const notes = document.getElementById('inp-prod-notes').value.trim();
+  const price = document.getElementById('inp-prod-price').value.trim();
   if (editingProdId) {
     const allProducts = await dbGetAll('products');
     const p = allProducts.find(x => x.id === editingProdId);
-    if (p) { p.name = name; p.status = currentStatus; p.img = pendingImg||null; p.notes = notes; await dbPut('products', p); }
+    if (p) { p.name = name; p.status = currentStatus; p.img = pendingImg||null; p.notes = notes; p.price = price; await dbPut('products', p); }
     // Update detail view if open
     document.getElementById('detailTitle').textContent = name;
   } else {
     const allProducts = await dbGetAll('products');
     const order = allProducts.filter(p => p.categoryId === currentCatId).length;
-    await dbPut('products', { id: Date.now(), categoryId: currentCatId, name, status: currentStatus, img: pendingImg||null, notes, order });
+    await dbPut('products', { id: Date.now(), categoryId: currentCatId, name, status: currentStatus, img: pendingImg||null, notes, price, order });
   }
   hideSheet('sheetProduct');
   await renderProducts();

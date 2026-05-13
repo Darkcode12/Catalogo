@@ -119,6 +119,7 @@ body{font-family:'DM Sans',sans-serif;color:#f0ede8;overscroll-behavior:none;-we
 .detail-badge-try{background:rgba(234,179,8,.15);color:var(--try);border:1px solid rgba(234,179,8,.3)}
 .detail-notes-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:500}
 .detail-notes-text{font-size:14px;color:var(--text);line-height:1.6;white-space:pre-wrap;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.detail-price{font-size:22px;font-family:'Syne',sans-serif;font-weight:800;color:var(--accent)}
 
 /* OVERLAY + SHEET */
 .overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.78);display:flex;align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
